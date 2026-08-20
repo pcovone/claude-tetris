@@ -1,0 +1,58 @@
+name: Claude Issue Triage
+
+on:
+  issues:
+    types: [opened, edited]
+
+concurrency:
+  group: issue-triage-${{ github.event.issue.number }}
+  cancel-in-progress: true
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      id-token: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Ensure component labels exist
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh label create "rendering" --color "1D76DB" --description "Relacionado con el renderizado en canvas" --force
+          gh label create "input" --color "5319E7" --description "Relacionado con el manejo de teclado/input" --force
+          gh label create "collision" --color "B60205" --description "Relacionado con colisiones, rotacion o wall kicks" --force
+          gh label create "scoring" --color "FBCA04" --description "Relacionado con puntaje o nivel" --force
+          gh label create "performance" --color "0E8A16" --description "Relacionado con problemas de rendimiento" --force
+
+      - name: Run Claude issue triage
+        id: claude
+        uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+
+          prompt: |
+            Analiza el issue #${{ github.event.issue.number }} de este repositorio (un Tetris en HTML5 Canvas puro, sin dependencias: index.html, style.css, game.js).
+
+            Pasos:
+            1. Lee el título y cuerpo del issue con `gh issue view ${{ github.event.issue.number }}`.
+            2. Revisa el código relevante (game.js, index.html, style.css) y CLAUDE.md para entender qué parte del sistema está involucrada según la arquitectura documentada: modelo del tablero, piezas, colisiones (`collide()`), wall kicks (`tryRotate`), locking (`lockPiece`/`merge`/`clearLines`/`spawn`), scoring/nivel, rendering (`draw`/`drawNext`/`drawGrid`/`drawBlock`/`ghostY`), o input (listener de `keydown`).
+            3. Asigna las labels apropiadas con `gh issue edit ${{ github.event.issue.number }} --add-label "..."`, combinando labels generales existentes (bug, enhancement, documentation, question, duplicate, invalid, wontfix, help wanted, good first issue, accessibility) con labels de componente (rendering, input, collision, scoring, performance) según corresponda. Usa solo las labels que apliquen, no todas.
+            4. Publica un comentario en el issue (`gh issue comment ${{ github.event.issue.number }} --body "..."`) en español, con un diagnóstico general que incluya:
+               - Resumen del problema en 1-2 frases.
+               - Área(s) del código involucradas (archivo y función/sección específica).
+               - Hipótesis de la causa raíz.
+               - Sugerencia de enfoque general para abordarlo, como guía para la implementación posterior.
+
+            No implementes ni propongas cambios de código en esta ejecución, solo análisis, labels y el comentario de diagnóstico. No modifiques el título ni el cuerpo del issue.
+
+          claude_args: |
+            --allowedTools "Bash(gh issue view:*)" "Bash(gh issue edit:*)" "Bash(gh issue comment:*)" "Bash(gh label list:*)" "Read" "Grep" "Glob"
