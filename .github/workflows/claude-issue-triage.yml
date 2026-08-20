@@ -52,6 +52,8 @@ jobs:
                - Hipótesis de la causa raíz.
                - Sugerencia de enfoque general para abordarlo, como guía para la implementación posterior.
 
+               El comentario debe estar escrito en formato Markdown válido que GitHub pueda renderizar correctamente (encabezados, listas, negritas y bloques de código con backticks para nombres de archivo/función según corresponda).
+
             No implementes ni propongas cambios de código en esta ejecución, solo análisis, labels y el comentario de diagnóstico. No modifiques el título ni el cuerpo del issue.
 
           claude_args: |
