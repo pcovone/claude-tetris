@@ -231,3 +231,141 @@ kbd {
 #restart-btn:hover {
   background: var(--accent-hover);
 }
+
+/* ---- High scores ---- */
+.highscores {
+  gap: 8px;
+}
+
+#highscore-list {
+  list-style: decimal inside;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text);
+}
+
+#highscore-list li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+#highscore-list .hs-name {
+  color: var(--control-text);
+}
+
+#highscore-list .hs-score {
+  font-family: 'Courier New', Courier, monospace;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.highscores .empty,
+.overlay-highscores .empty {
+  font-size: 12px;
+  color: var(--control-text);
+}
+
+.overlay-highscores {
+  list-style: decimal inside;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  color: var(--text);
+  width: 200px;
+}
+
+.overlay-highscores li {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.overlay-highscores .hs-name {
+  color: var(--control-text);
+}
+
+.overlay-highscores .hs-score {
+  font-family: 'Courier New', Courier, monospace;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.stat-line {
+  font-size: 11px;
+  color: var(--control-text);
+}
+
+.stat-line span {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+#reset-scores-btn {
+  margin-top: 4px;
+  background: transparent;
+  color: var(--control-text);
+  border: 1px solid var(--kbd-border);
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-size: 11px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: background 0.15s, color 0.15s;
+}
+
+#reset-scores-btn:hover {
+  background: var(--kbd-bg);
+  color: var(--text);
+}
+
+#new-record-msg {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.5px;
+}
+
+#new-record-msg.hidden {
+  display: none;
+}
+
+#player-name-input {
+  font-family: inherit;
+  font-size: 14px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  border: 1px solid var(--board-border);
+  background: var(--board-bg);
+  color: var(--text);
+  text-align: center;
+  width: 160px;
+}
+
+#player-name-input.hidden {
+  display: none;
+}
+
+#save-score-btn {
+  background: var(--accent);
+  color: var(--accent-contrast);
+  border: none;
+  border-radius: 6px;
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: background 0.15s;
+}
+
+#save-score-btn:hover {
+  background: var(--accent-hover);
+}
+
+#save-score-btn.hidden {
+  display: none;
+}
